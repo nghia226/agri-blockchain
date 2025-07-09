@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Chi tiết sản phẩm</h2>
+
+{% if product %}
+
+    {% if warning %}
+      <div class="alert alert-warning">
+        {{ warning }}
+      </div>
+    {% endif %}
+
+    <p><strong>ID:</strong> {{ product.product_id }}</p>
+    <p><strong>Tên:</strong> {{ product.name }}</p>
+    <p><strong>Nông dân:</strong> {{ product.farmer }}</p>
+    <p><strong>Địa điểm:</strong> {{ product.location }}</p>
+    <p><strong>Ngày thu hoạch:</strong> {{ product.harvest_date }}</p>
+    <p><strong>Chứng nhận:</strong> {{ product.certification }}</p>
+
+    <h5 class="mt-4">📜 Lịch sử chuỗi cung ứng:</h5>
+    <ul class="list-group">
+      {% for entry in product.timeline %}
+        <li class="list-group-item">{{ entry }}</li>
+      {% endfor %}
+    </ul>
+
+    <!-- Form cập nhật bước -->
+    <form method="POST" action="{{ url_for('update_timeline', pid=product.product_id) }}" class="mt-4">
+      <div class="row g-2">
+        <div class="col-md-6">
+          <select name="step" class="form-select" required>
+            <option value="" disabled selected>Chọn bước tiếp theo</option>
+            <option value="pack">📦 Đóng gói</option>
+            <option value="ship">🚚 Vận chuyển</option>
+            <option value="sell">🏬 Tiêu thụ</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <button type="submit" class="btn btn-primary">Cập nhật</button>
+        </div>
+      </div>
+    </form>
+
+    <!-- 📎 Upload tài liệu -->
+    <h5 class="mt-5">📎 Tài liệu đính kèm:</h5>
+    <form method="POST" action="{{ url_for('upload_document', pid=product.product_id) }}" enctype="multipart/form-data" class="mb-3">
+      <div class="row g-2">
+        <div class="col-md-9">
+          <input type="file" name="file" accept=".pdf" class="form-control" required>
+        </div>
+        <div class="col-md-3">
+          <button class="btn btn-outline-success w-100" type="submit">Tải lên</button>
+        </div>
+      </div>
+    </form>
+
+    {% if files %}
+    <ul class="list-group">
+      {% for filename in files %}
+        <li class="list-group-item">
+          <a href="{{ url_for('download_document', pid=pid, filename=filename) }}" target="_blank">{{ filename }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+      <p><i>Chưa có tài liệu nào được tải lên.</i></p>
+    {% endif %}
+
+    <!-- 📱 QR Code -->
+    <h5 class="mt-5">📱 Mã QR truy xuất:</h5>
+    {% if qr_code %}
+      <img src="data:image/png;base64,{{ qr_code }}" alt="QR Code" class="img-thumbnail" style="max-width: 200px;">
+      <p class="text-muted"><small>Quét để truy xuất sản phẩm này</small></p>
+    {% else %}
+      <p><i>Không thể tạo mã QR.</i></p>
+    {% endif %}
+
+    <a href="{{ url_for('products') }}" class="btn btn-secondary mt-4">⬅ Về danh sách</a>
+
+{% else %}
+    <p>❌ Không tìm thấy sản phẩm.</p>
+{% endif %}
+{% endblock %}

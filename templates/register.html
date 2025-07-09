@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="mb-3">Đăng ký sản phẩm nông sản</h2>
+<form method="POST" class="row g-3">
+  <div class="col-md-6">
+    <label>Tên sản phẩm</label>
+    <input name="name" class="form-control" required>
+  </div>
+  <div class="col-md-6">
+    <label>Nông dân</label>
+    <input name="farmer" class="form-control" required>
+  </div>
+  <div class="col-md-6">
+    <label>Địa điểm</label>
+    <input name="location" class="form-control" required>
+  </div>
+  <div class="col-md-6">
+    <label>Ngày thu hoạch</label>
+    <input name="harvest_date" type="date" class="form-control" required>
+  </div>
+  <div class="col-12">
+    <label>Chứng nhận chất lượng</label>
+    <input name="certification" class="form-control" required>
+  </div>
+  <div class="col-12">
+    <button class="btn btn-success" type="submit">Lưu sản phẩm</button>
+    <a href="/" class="btn btn-secondary">Hủy</a>
+  </div>
+</form>
+{% endblock %}

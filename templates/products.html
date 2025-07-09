@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="mb-3">📦 Danh sách sản phẩm</h2>
+
+<!-- Thanh tìm kiếm -->
+<form method="GET" action="{{ url_for('products') }}" class="mb-3 row g-2">
+  <div class="col-md-9">
+    <input type="text" name="q" placeholder="🔍 Tìm theo tên hoặc mã sản phẩm..." class="form-control" value="{{ query }}">
+  </div>
+  <div class="col-md-3">
+    <button class="btn btn-outline-primary w-100" type="submit">Tìm kiếm</button>
+  </div>
+</form>
+
+<!-- Danh sách kết quả -->
+{% if products %}
+<ul class="list-group">
+  {% for p in products %}
+    <li class="list-group-item">
+      <a href="{{ url_for('detail', pid=p.product_id) }}">{{ p.name }}</a> – {{ p.farmer }}
+    </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>❌ Không tìm thấy sản phẩm phù hợp.</p>
+{% endif %}
+{% endblock %}
